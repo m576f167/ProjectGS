@@ -40,11 +40,12 @@ function decryptAsymmetric(data) {
  *
  * @param data string the data to be encrypted
  * @param key string the key for encryption
+ * @param iv string the initialization vector
  *
  * @return string the encrypted data
  */
-function encryptSymmetric(data, key) {
-  return encryptionSymmetric.encrypt(data, key);
+function encryptSymmetric(data, key, iv) {
+  return encryptionSymmetric.encrypt(data, key, iv);
 }
 
 /**
@@ -52,11 +53,12 @@ function encryptSymmetric(data, key) {
  *
  * @param data string the data to be decrypted
  * @param key string the key for decryption
+ * @param iv string the initialization vector
  *
  * @return string the decrypted data
  */
-function decryptSymmetric(data, key) {
-  return encryptionSymmetric.decrypt(data, key);
+function decryptSymmetric(data, key, iv) {
+  return encryptionSymmetric.decrypt(data, key, iv);
 }
 
 module.exports = {

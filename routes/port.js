@@ -13,7 +13,8 @@ router.use(decryption);
 router.post('/status', function(req, res, next) {
   response = encryptionController.encryptSymmetric(
     JSON.stringify(portManagerController.getPortInfo()),
-    req.body.data.key
+    req.body.data.key,
+    req.body.data.iv
   );
 
   res.send(response);

@@ -21,11 +21,20 @@ module.exports = (function() {
    *
    * @param data string the data to be enrypted
    * @param key string the key for encryption
+   * @param iv string the initialization vector
    *
    * @return string the string containing encrypted data
    */
-  EncryptionSymmetric.prototype.encrypt = function(data, key) {
-    return this.$aes.encrypt(data, key).toString();
+  EncryptionSymmetric.prototype.encrypt = function(data, key, iv) {
+    return this.$aes.encrypt(
+      data,
+      CryptoJS.enc.Utf8.parse(key),
+      {
+        iv: CryptoJS.enc.Utf8.parse(iv),
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+      }
+    ).toString();
   }
 
   /**
@@ -33,11 +42,20 @@ module.exports = (function() {
    *
    * @param data string the data to be decrypted
    * @param key string the key for decryption
+   * @param iv string the initialization vector
    *
    * @return string the utf-8 encoded string containing the decrypted data
    */
-  EncryptionSymmetric.prototype.decrypt = function(data, key) {
-    return this.$aes.decrypt(data, key).toString(CryptoJS.enc.Utf8);
+  EncryptionSymmetric.prototype.decrypt = function(data, key, iv) {
+    return this.$aes.decrypt(
+      data,
+      CryptoJS.enc.Utf8.parse(key),
+      {
+        iv: CryptoJS.enc.Utf8.parse(iv),
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+      }
+    ).toString(CryptoJS.enc.Utf8);
   }
 
   return EncryptionSymmetric;
