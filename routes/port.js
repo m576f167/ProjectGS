@@ -10,11 +10,11 @@ var router = express.Router();
 router.use(decryption);
 
 /* GET portStatus. */
-router.post('/status', function(req, res, next) {
+router.get('/status', function(req, res, next) {
   response = encryptionController.encryptSymmetric(
     JSON.stringify(portManagerController.getPortInfo()),
-    req.body.data.key,
-    req.body.data.iv
+    req.authorization.key,
+    req.authorization.iv
   );
 
   res.send(response);
@@ -22,10 +22,18 @@ router.post('/status', function(req, res, next) {
 
 /* Update Port. */
 router.post('/update', authorization, function(req, res, next) {
-  port = req.body.data.port;
+  try {
+    decryptedBody = JSON.parse(
+      encryptionController.decryptAsymmetric(req.body.data)
+    );
 
-  if(!port) {
-    error = new Error('Port is not defined');
+    port = decryptedBody.port;
+
+    if(!port) {
+      throw new Error('Port is not defined');
+    }
+  }
+  catch(error) {
     error.status = 422;
     throw error;
   }

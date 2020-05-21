@@ -5,7 +5,7 @@ const secret = process.env.ADMIN_SECRET || 'admin';
 var router = express.Router();
 
 router.use(function(req, res, next) {
-  clientSecret = req.body.data.secret;
+  clientSecret = req.authorization.secret;
 
   if((!clientSecret) || (secret.localeCompare(clientSecret) != 0)) {
     error = new Error('Unauthorized');

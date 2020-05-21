@@ -7,7 +7,13 @@ router.use(function(req, res, next) {
   data = null;
 
   try {
-    decryptedData = encryptionController.decryptAsymmetric(req.body.data);
+    authorization = req.header('Authorization');
+
+    if (!authorization) {
+      throw new Error('No Authorization Header');
+    }
+
+    decryptedData = encryptionController.decryptAsymmetric(authorization);
 
     data = JSON.parse(decryptedData);
 
@@ -24,11 +30,11 @@ router.use(function(req, res, next) {
     }
   }
   catch(error) {
-    error.status = 422;
+    error.status = 401;
     throw error;
   }
 
-  req.body.data = data;
+  req.authorization = data;
 
   next();
 });
